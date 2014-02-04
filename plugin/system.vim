@@ -49,8 +49,13 @@ if !exists("g:system_echocmd")
     let g:system_echocmd = 0
 endif
 
-fun! WrapCmdLine(cmdline) " {{{
-    let cmdline = a:cmdline
+fun! WrapCmdLine(dispatcher) " {{{
+    " a:dispatcher: is crdispatcher#CRDispatcher dict
+    if a:dispatcher.cmdtype !=# ':' || a:dispatcher.ctrl_f
+	" Do not fire with <c-f>
+	return
+    endif
+    let cmdline = a:dispatcher.cmdline
     " Add cmdline to the history
     if cmdline[0:1] == "! "  
 	let cmd = cmdline[2:]
@@ -71,11 +76,10 @@ fun! WrapCmdLine(cmdline) " {{{
 	let cmd = escape(cmd, "\"")
 	let his = "|call histdel(':', -1)"
 	if g:system_echocmd
-	    return "echo \"".cmd."\n\".system(\"".cmd."\")".his
+	    let a:dispatcher.cmdline = "echo \"".cmd."\n\".system(\"".cmd."\")".his
 	else
-	    return "echo system(\"".cmd."\")".his
+	    let a:dispatcher.cmdline = "echo system(\"".cmd."\")".his
 	endif
     endif
-    return cmdline
 endfun " }}}
-call add(crdispatcher#CRDispatcher[':'], function('WrapCmdLine'))
+call add(crdispatcher#CRDispatcher['callbacks'], function('WrapCmdLine'))
