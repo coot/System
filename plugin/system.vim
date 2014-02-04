@@ -49,41 +49,6 @@ if !exists("g:system_echocmd")
     let g:system_echocmd = 0
 endif
 
-if !exists('CRDispatcher')
-    let g:CRDispatcher = {
-	\ 'expr': [],
-	\ 'search': [],
-	\ }
-    fun g:CRDispatcher.dispatch() dict
-	let cmdtype = getcmdtype()
-	if cmdtype == ':'
-	    let key = 'expr'
-	elseif cmdtype == '/'
-	    let key = 'search'
-	else
-	    return getcmdline()
-	endif
-	if has_key(self, key)
-	    let Expr = get(self, key)
-	    if type(Expr) == 3
-		let res = getcmdline()
-		for F in Expr
-		    let res = F(res)
-		endfor
-		return res
-	    else
-		return self[key]()
-	    endif
-	endif
-	return getcmdline()
-    endfun
-endif
-if !exists('*CRDispatch')
-    fun CRDispatch()
-	return g:CRDispatcher.dispatch()
-    endfun
-endif
-
 fun! WrapCmdLine(cmdline) " {{{
     let cmdline = a:cmdline
     " Add cmdline to the history
@@ -113,9 +78,4 @@ fun! WrapCmdLine(cmdline) " {{{
     endif
     return cmdline
 endfun " }}}
-call add(CRDispatcher['expr'], function('WrapCmdLine'))
-
-if empty(maparg('<Plug>CRDispatch', 'c'))
-    cno <Plug>CRDispatch <C-\>eCRDispatch()<CR><CR>
-endif
-" cno <Plug>eWrapCmdLine <C-\>eWrapCmdLine()<CR><CR>
+call add(crdispatcher#CRDispatcher[':'], function('WrapCmdLine'))
