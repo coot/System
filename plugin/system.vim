@@ -84,8 +84,8 @@ if !exists('*CRDispatch')
     endfun
 endif
 
-fun! WrapCmdLine() " {{{
-    let cmdline = getcmdline()
+fun! WrapCmdLine(cmdline) " {{{
+    let cmdline = a:cmdline
     " Add cmdline to the history
     if cmdline[0:1] == "! "  
 	let cmd = cmdline[2:]
@@ -113,14 +113,9 @@ fun! WrapCmdLine() " {{{
     endif
     return cmdline
 endfun " }}}
+call add(CRDispatcher['expr'], function('WrapCmdLine'))
 
 if empty(maparg('<Plug>CRDispatch', 'c'))
     cno <Plug>CRDispatch <C-\>eCRDispatch()<CR><CR>
 endif
 " cno <Plug>eWrapCmdLine <C-\>eWrapCmdLine()<CR><CR>
-
-if empty(globpath(&rtp, 'plugin/cmd_alias.vim'))
-    " My cmd_alias.vim plugin will take care of this map.
-    " This is important since both plugins define a cmap to <CR>.
-    CRDispatcher.expr = funcref('WrapCmdLine')
-endif
