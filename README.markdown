@@ -35,9 +35,8 @@ Benefits: you get completion for system commands and system files.
 
 You can use the expression register with Vim 7.3.686.
 
-
 # Requirements
-You have to also install [crdispatch](https://github.com/coot/CRDispatcher)
+You have to also install [CRDispatcher](https://github.com/coot/CRDispatcher)
 plugin.
 
 I learned how to do that reading the emacscommandline plugin.
