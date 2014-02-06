@@ -1,0 +1,17 @@
+{
+    "name": "System",
+    "repository":  {
+	"type": "git",
+	"url": "git@github.com:coot/System.git",
+	"script-type": "plugin",
+	"vim_script_nr": 4224,
+    },
+    "dependencies": {
+	"CRDispatcher": {
+	    "type": "git",
+	    "url": "git@github.com:coot/CRDispatcher.git",
+	    "script-type": "plugin",
+	    "vim_script_nr": 4856,
+	},
+    },
+}
