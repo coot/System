@@ -48,7 +48,7 @@ try
     call add(crdispatcher#CRDispatcher['callbacks'], function('WrapCmdLine'))
 catch /E121:/
     echohl ErrorMsg
-    echom 'System Vim Plugin: please install "https://github.com/coot/CRDispatcher".'
+    echom 'System Plugin: please install "https://github.com/coot/CRDispatcher".'
     echohl Normal
     finish
 endtry
