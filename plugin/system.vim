@@ -2,6 +2,7 @@
 " Email:  mszamot [AT] gmail [DOT] com
 " License: vim-license, see :help license
 "
+
 if !exists("g:system_expand")
     let g:system_expand = 1
     " If 1 expand % as in the command line.
@@ -43,4 +44,11 @@ fun! WrapCmdLine(dispatcher) " {{{
 	endif
     endif
 endfun " }}}
-call add(crdispatcher#CRDispatcher['callbacks'], function('WrapCmdLine'))
+try
+    call add(crdispatcher#CRDispatcher['callbacks'], function('WrapCmdLine'))
+catch /E121/
+    echohl ErrorMsg
+    echom 'System Vim Plugin: please install "https://github.com/coot/CRDispatcher".'
+    echohl Normal
+    finish
+endtry
