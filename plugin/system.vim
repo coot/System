@@ -13,11 +13,13 @@ endif
 
 fun! WrapCmdLine(dispatcher) " {{{
     " a:dispatcher: is crdispatcher#CRDispatcher dict
+    let a:dispatcher.state = 2
     if a:dispatcher.cmdtype !=# ':' || a:dispatcher.ctrl_f
 	" Do not fire with <c-f>
 	return
     endif
-    let cmdline = a:dispatcher.cmdline
+    let cmd = a:dispatcher.cmd
+    let cmdline = cmd.cmd
     " Add cmdline to the history
     if cmdline[0:1] == "! "  
 	let cmd = cmdline[2:]
@@ -35,12 +37,12 @@ fun! WrapCmdLine(dispatcher) " {{{
 		endif
 	    endfor
 	endif
-	let cmd = escape(cmd, "\"")
-	let his = "|call histdel(':', -1)"
+	let _cmd = escape(cmd, "\"")
+	let _his = "|call histdel(':', -1)"
 	if g:system_echocmd
-	    let a:dispatcher.cmdline = "echo \"".cmd."\n\".system(\"".cmd."\")".his
+	    let cmd.cmd = "echo \""._cmd."\n\".system(\""._cmd."\")"._his
 	else
-	    let a:dispatcher.cmdline = "echo system(\"".cmd."\")".his
+	    let cmd.cmd = "echo system(\""._cmd."\")"._his
 	endif
     endif
 endfun " }}}
